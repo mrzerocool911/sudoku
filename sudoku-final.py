@@ -8,6 +8,7 @@ sudoku_puzzle_dup = deepcopy(sudoku_puzzle)
 total_possible_digits = 123456789
 length_dict = {}
 
+
 print '**************************************Initial Sudoku***************************************************'
 for item in sudoku_puzzle:
     print item
@@ -64,22 +65,19 @@ def check_sudoku_valid(i,j):
                 return False
     return True
 
-
 determine_digits(1)
 determine_digits(2)
 sorted(length_dict.keys())
 key_list = list(length_dict.keys())
 length = len(key_list)
-
-j = -1
+print key_list
+j = 0
+i = 0
 count = 0
-while j < length - 1:
-    j = j+1
+while j < length:
     item = key_list[j]
     each_list = list(set(length_dict[item]))
-    i = -1
-    while i < len(each_list)-1:
-        i = i + 1
+    while i < len(each_list):
         in_i = each_list[i][0]
         in_j = each_list[i][1]
         if (sudoku_puzzle[in_i][in_j] == 0):
@@ -87,18 +85,32 @@ while j < length - 1:
         else:
             index = str(sudoku_puzzle_dup[in_i][in_j]).find(str(sudoku_puzzle[in_i][in_j]))
             if index == len(str(sudoku_puzzle_dup[in_i][in_j]))-1:
+                sudoku_puzzle[in_i][in_j] = 0
+                if i > 0:
+                    i = i-1
+                else:
+                    j = j -1
+                    i = len(list(set(length_dict[key_list[j]]))) - 1
                 continue
             temp = str(sudoku_puzzle_dup[in_i][in_j])[index+1:index+2]
             sudoku_puzzle[in_i][in_j] = int(temp)
         if(check_sudoku_valid(in_i,in_j)):
-            pass
-        else:
-            i = i - 1
-            if i < 0 :
-                j = j - 1
+            i = i + 1
+            if i == len(each_list):
+                j = j + 1
+                i = 0
                 break
             pass
-
+        else:
+            index = str(sudoku_puzzle_dup[in_i][in_j]).find(str(sudoku_puzzle[in_i][in_j]))
+            if index == len(str(sudoku_puzzle_dup[in_i][in_j]))-1:
+                sudoku_puzzle[in_i][in_j] = 0
+                if i > 0:
+                    i = i-1
+                else:
+                    j = j -1
+                    i = len(list(set(length_dict[key_list[j]]))) - 1
+            pass
 print '***************************************Solved Sudoku**********************************'
 for item in sudoku_puzzle:
     print item
